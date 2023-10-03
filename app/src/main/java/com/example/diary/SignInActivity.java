@@ -5,21 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,9 +28,6 @@ public class SignInActivity extends AppCompatActivity {
 
     private MaterialButton signInBtn;
 
-    private FirebaseAuth mAuth;
-
-    ProgressBar progressBar;
 
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
@@ -50,7 +38,6 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
 
-        mAuth = FirebaseAuth.getInstance();
 
         name = findViewById(R.id.Name);
         pass = findViewById(R.id.pass);
@@ -59,8 +46,6 @@ public class SignInActivity extends AppCompatActivity {
 
         signInBtn = findViewById(R.id.signInBtn);
 
-
-        progressBar = findViewById(R.id.progressBar);
 
 
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -94,32 +79,12 @@ public class SignInActivity extends AppCompatActivity {
                     addDataToFirebase(userName,userEmail,userPass);
                 }
 
-               /* mAuth.createUserWithEmailAndPassword(userEmail, userPass)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                progressBar.setVisibility(View.GONE);
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    Toast.makeText(SignInActivity.this, "Account created.",
-                                            Toast.LENGTH_SHORT).show();
-                                    openLogInPage();
-
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Toast.makeText(SignInActivity.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
-
-                                }
-                            }
-                        });*/
-
             }
         });
     }
 
     public void openLogInPage() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, LogInActivity.class);
         startActivity(intent);
         finish();
     }
