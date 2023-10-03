@@ -1,11 +1,13 @@
 package com.example.diary;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -13,6 +15,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -27,6 +34,8 @@ public class LogInActivity extends AppCompatActivity {
     private MaterialButton loginBtn;
     private TextView signIn;
 
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,27 +49,44 @@ public class LogInActivity extends AppCompatActivity {
         userName = findViewById(R.id.userName);
         password = findViewById(R.id.password);
 
-        String url = "jdbc:mysql://localhost/Diary";
-        String userName = "root";
-        String password = "";
+
+
+
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               /* try {
-                    Class.forName("com.mysql.cj.Driver");
-                    Connection connection = DriverManager.getConnection(url,userName,password);
-                    Statement statement = connection.createStatement();
-                    ResultSet resultSet = statement.executeQuery("select * from Users");
+                String name = String.valueOf(userName.getText());
+                String pass = String.valueOf(password.getText());
 
-                    if((resultSet.next())) {
-                        openHomePage();
+                firebaseDatabase = FirebaseDatabase.getInstance();
+                databaseReference = firebaseDatabase.getReference("Users");
+
+                databaseReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        String value = snapshot.child(name).child("userName").getValue(String.class);
+                        String passwordDb = snapshot.child(name).child("userPassword").getValue(String.class);
+
+                        if(TextUtils.isEmpty(name) || TextUtils.isEmpty(pass)) {
+                            Toast.makeText(LogInActivity.this, "Error ", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        if(value.equals(name) && passwordDb.equals(pass)) {
+                            openHomePage();
+                            Toast.makeText(LogInActivity.this, "You are logged in ", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(LogInActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                        }
+
                     }
 
-                } catch (Exception e){
-                    Toast.makeText(LogInActivity.this," Error:"  + e , Toast.LENGTH_LONG).show();
-                }*/
-
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(LogInActivity.this, "Fail to get data." + error , Toast.LENGTH_SHORT).show();
+                    }
+                });
 
             }
         });
@@ -83,6 +109,7 @@ public class LogInActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
+
 
 
 }

@@ -20,52 +20,81 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class SignInActivity extends AppCompatActivity {
 
-    private EditText name;
+
     private EditText pass;
     private EditText email;
-    private TextView txt;
+    private EditText name;
+    private EditText confirmPass;
+
     private MaterialButton signInBtn;
 
     private FirebaseAuth mAuth;
 
     ProgressBar progressBar;
 
-   // private static final String DB_URL = "jdbc:mysql://10.0.2.2:3306/Diary";
-   // private static final String USER = "root";
-   // private static final String PASS = "";
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
+    User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
 
         mAuth = FirebaseAuth.getInstance();
+
         name = findViewById(R.id.Name);
         pass = findViewById(R.id.pass);
         email = findViewById(R.id.Email);
+        confirmPass = findViewById(R.id.passConfirm);
 
         signInBtn = findViewById(R.id.signInBtn);
-        txt = findViewById(R.id.logo);
+
 
         progressBar = findViewById(R.id.progressBar);
+
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference("Users");
+
+
+        user = new User();
 
         signInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                progressBar.setVisibility(View.VISIBLE);
+
                 String userName = String.valueOf(name.getText());
                 String userEmail = String.valueOf(email.getText());
                 String userPass = String.valueOf(pass.getText());
 
-                if(TextUtils.isEmpty(userEmail)) {
-                    Toast.makeText(SignInActivity.this,"enter your email", Toast.LENGTH_LONG).show();
-                    return;
+                if(TextUtils.isEmpty(userName)) {
+                    Toast.makeText(SignInActivity.this,"enter your name", Toast.LENGTH_LONG).show();
+
                 }
 
-                mAuth.createUserWithEmailAndPassword(userEmail, userPass)
+                else if(TextUtils.isEmpty(userEmail)) {
+                    Toast.makeText(SignInActivity.this,"enter your email", Toast.LENGTH_LONG).show();
+
+                }
+
+                else if(!userPass.equals(confirmPass.getText().toString())) {
+                    Toast.makeText(SignInActivity.this,"enter your password korrekt", Toast.LENGTH_LONG).show();
+
+                } else {
+                    addDataToFirebase(userName,userEmail,userPass);
+                }
+
+               /* mAuth.createUserWithEmailAndPassword(userEmail, userPass)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -74,7 +103,7 @@ public class SignInActivity extends AppCompatActivity {
                                     // Sign in success, update UI with the signed-in user's information
                                     Toast.makeText(SignInActivity.this, "Account created.",
                                             Toast.LENGTH_SHORT).show();
-                                   // openLogInPage();
+                                    openLogInPage();
 
                                 } else {
                                     // If sign in fails, display a message to the user.
@@ -83,33 +112,7 @@ public class SignInActivity extends AppCompatActivity {
 
                                 }
                             }
-                        });
-
-
-               /* try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-                    Statement stmt = conn.createStatement();
-
-                    // Example: Execute a SELECT query
-                    String query = "SELECT * FROM Users";
-                    ResultSet resultSet = stmt.executeQuery(query);
-
-                    // Process ResultSet
-                    if (resultSet.next()) {
-                        // Retrieve data from the ResultSet
-                        Toast.makeText(SignInActivity.this,"", Toast.LENGTH_LONG).show();
-                        // Process data
-                    }
-
-                    // Close connections
-                    resultSet.close();
-                    stmt.close();
-                    conn.close();
-                }catch (Exception e) {
-                    Toast.makeText(SignInActivity.this,e.getMessage() + " ", Toast.LENGTH_LONG).show();
-                    txt.setText(e.getMessage());
-                }*/
+                        });*/
 
             }
         });
@@ -120,4 +123,28 @@ public class SignInActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+    private void addDataToFirebase(String name, String email, String password){
+        user.setUserName(name);
+        user.setUserEmail(email);
+        user.setUserPassword(password);
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+               // databaseReference.setValue(user);
+                databaseReference.child(name).setValue(user);
+                Toast.makeText(SignInActivity.this, "data added", Toast.LENGTH_SHORT).show();
+                openLogInPage();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(SignInActivity.this, "Fail to add data " + error, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+    }
+
 }
