@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -21,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class LogInActivity extends AppCompatActivity {
 
+    public static int globalVariable;
     private EditText userName;
     private EditText password;
     private MaterialButton loginBtn;
@@ -99,6 +101,9 @@ public class LogInActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public int getGlobalVariable() {
+        return globalVariable;
+    }
 
 
 }
