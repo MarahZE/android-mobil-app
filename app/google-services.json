@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "848284707611",
+    "project_id": "login-firebase-15f76",
+    "storage_bucket": "login-firebase-15f76.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:848284707611:android:6fc2295270cbee44d841be",
+        "android_client_info": {
+          "package_name": "com.example.diary"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRvzxCI_EGw1Crb73hl3X52yh13aI3TJM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
