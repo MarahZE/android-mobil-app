@@ -31,24 +31,24 @@
         android:textStyle="bold"/>
 
     <EditText
-        android:id="@+id/userName"
+        android:id="@+id/userEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/logIn"
-        android:hint="Username"
+        android:hint="UseEmail"
         android:textColor="@color/black"
         android:textColorHint="@color/black"
         android:layout_margin="10dp"
         android:padding="20dp"
         android:background="#30ffffff"
-        android:drawableLeft="@drawable/baseline_person_24"
+        android:drawableLeft="@drawable/baseline_email_24"
         android:drawablePadding="20dp"/>
 
     <EditText
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/userName"
+        android:layout_below="@+id/userEmail"
         android:hint="Password"
         android:inputType="textPassword"
         android:textColor="@color/black"

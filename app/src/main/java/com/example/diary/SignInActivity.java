@@ -10,7 +10,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,6 +36,7 @@ public class SignInActivity extends AppCompatActivity {
 
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
+    private FirebaseAuth mAuth;
     User user;
 
     @Override
@@ -46,6 +52,7 @@ public class SignInActivity extends AppCompatActivity {
 
         signInBtn = findViewById(R.id.signInBtn);
 
+        mAuth = FirebaseAuth.getInstance();
 
 
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -73,10 +80,25 @@ public class SignInActivity extends AppCompatActivity {
                 }
 
                 else if(!userPass.equals(confirmPass.getText().toString())) {
-                    Toast.makeText(SignInActivity.this,"enter your password korrekt", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SignInActivity.this,"enter your password correct", Toast.LENGTH_LONG).show();
 
                 } else {
-                    addDataToFirebase(userName,userEmail,userPass);
+                    mAuth.createUserWithEmailAndPassword(userEmail, userPass)
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        addDataToFirebase(userName,userEmail,userPass);
+                                    } else {
+                                        // If sign in fails, display a message to the user.
+                                        Toast.makeText(SignInActivity.this, "Authentication failed.",Toast.LENGTH_SHORT).show();
+
+                                    }
+                                }
+                            });
+
+
+                    //addDataToFirebase(userName,userEmail,userPass);
                 }
 
             }

@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.diary.databinding.ActivityMainBinding;
@@ -39,4 +41,5 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.frame_layout,fragment);
         transaction.commit();
     }
+
 }
