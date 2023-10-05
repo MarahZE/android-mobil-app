@@ -83,6 +83,11 @@ public class LogInActivity extends AppCompatActivity {
                     }
                 });*/
 
+                if(TextUtils.isEmpty(email) || TextUtils.isEmpty(pass)) {
+                    Toast.makeText(LogInActivity.this,"enter your data", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
 
                 mAuth.signInWithEmailAndPassword(email, pass)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {

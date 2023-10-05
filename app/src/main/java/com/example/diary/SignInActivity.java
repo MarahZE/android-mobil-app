@@ -115,12 +115,18 @@ public class SignInActivity extends AppCompatActivity {
         user.setUserName(name);
         user.setUserEmail(email);
         user.setUserPassword(password);
+        String userId;
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        userId = currentUser.getUid();
+
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                // databaseReference.setValue(user);
-                databaseReference.child(name).setValue(user);
+                databaseReference.child(userId).setValue(user);
                 Toast.makeText(SignInActivity.this, "data added", Toast.LENGTH_SHORT).show();
                 openLogInPage();
             }
