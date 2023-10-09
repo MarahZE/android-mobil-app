@@ -10,7 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -19,6 +21,10 @@ public class AddPostFragment extends Fragment implements AdapterView.OnItemSelec
 
 
     private Spinner spinner;
+    String spinnerValue;
+    private EditText title;
+    private EditText post;
+    private Button addPost;
     public AddPostFragment() {
         // Required empty public constructor
     }
@@ -32,11 +38,24 @@ public class AddPostFragment extends Fragment implements AdapterView.OnItemSelec
         View view = inflater.inflate(R.layout.fragment_addpost, container, false);
 
         spinner = view.findViewById(R.id.spinner);
+        title = view.findViewById(R.id.title);
+        post = view.findViewById(R.id.messagePost);
+        addPost = view.findViewById(R.id.addPost);
 
         ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.category, android.R.layout.simple_spinner_item);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(arrayAdapter);
         spinner.setOnItemSelectedListener(this);
+
+        addPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String titlePost = String.valueOf(title.getText());
+                String message = String.valueOf(post.getText());
+                Toast.makeText(getActivity(), spinnerValue, Toast.LENGTH_LONG).show();
+            }
+        });
+
 
 
 
@@ -46,8 +65,8 @@ public class AddPostFragment extends Fragment implements AdapterView.OnItemSelec
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        String text = adapterView.getItemAtPosition(i).toString();
-        Toast.makeText(adapterView.getContext(),text,Toast.LENGTH_LONG).show();
+        spinnerValue  = adapterView.getItemAtPosition(i).toString();
+        Toast.makeText(adapterView.getContext(),spinnerValue,Toast.LENGTH_LONG).show();
     }
 
     @Override
