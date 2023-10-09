@@ -5,8 +5,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.diary.databinding.ActivityMainBinding;
@@ -21,13 +19,13 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        openFragment(new HomeFragment());
+        openFragment(new CardFragment());
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
-            if(item.getItemId() == R.id.Post) {
+            if(item.getItemId() == R.id.home) {
                 openFragment(new CardFragment());
-            } else if (item.getItemId() == R.id.home) {
-                openFragment(new HomeFragment());
+            } else if (item.getItemId() == R.id.Post) {
+                openFragment(new AddPostFragment());
             } else if (item.getItemId() == R.id.profile) {
                 openFragment(new ProfileFragment());
             }
