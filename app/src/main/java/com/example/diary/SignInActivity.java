@@ -22,6 +22,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -67,7 +70,9 @@ public class SignInActivity extends AppCompatActivity {
 
                 String userName = String.valueOf(name.getText());
                 String userEmail = String.valueOf(email.getText());
+
                 String userPass = String.valueOf(pass.getText());
+
 
                 if(TextUtils.isEmpty(userName)) {
                     Toast.makeText(SignInActivity.this,"enter your name", Toast.LENGTH_LONG).show();
@@ -87,6 +92,7 @@ public class SignInActivity extends AppCompatActivity {
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
+
                                     if (task.isSuccessful()) {
                                         addDataToFirebase(userName,userEmail,userPass);
                                     } else {
@@ -114,6 +120,7 @@ public class SignInActivity extends AppCompatActivity {
     private void addDataToFirebase(String name, String email, String password){
         user.setUserName(name);
         user.setUserEmail(email);
+        password = hashPassword(password);
         user.setUserPassword(password);
         String userId;
 
@@ -121,13 +128,14 @@ public class SignInActivity extends AppCompatActivity {
 
         userId = currentUser.getUid();
 
+        String b = password;
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                // databaseReference.setValue(user);
                 databaseReference.child(userId).setValue(user);
-                Toast.makeText(SignInActivity.this, "data added", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SignInActivity.this, "data added" + b , Toast.LENGTH_SHORT).show();
                 openLogInPage();
             }
 
@@ -138,6 +146,28 @@ public class SignInActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    public String hashPassword(String password) {
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+            messageDigest.update(password.getBytes());
+            byte[] result = messageDigest.digest();
+
+            StringBuilder stringBuilder = new StringBuilder();
+            for(int i = 0; i < result.length; i++) {
+                String hash = Integer.toHexString(0xFF & result[i]);
+                while (hash.length() < 2) {
+                    hash = "0" + hash;
+                }
+                stringBuilder.append(hash);
+            }
+            return stringBuilder.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            Toast.makeText(getApplication(), e.getMessage() , Toast.LENGTH_LONG).show();
+        }
+        return "";
     }
 
 }
