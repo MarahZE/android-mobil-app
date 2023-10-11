@@ -63,7 +63,7 @@
             android:scrollbarStyle="insideInset"
             android:scrollbars="vertical" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/addPost"
             android:textColor="@color/black"
             android:layout_width="wrap_content"

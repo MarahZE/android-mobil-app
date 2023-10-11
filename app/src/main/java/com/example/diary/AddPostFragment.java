@@ -16,6 +16,19 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 
 public class AddPostFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
@@ -24,7 +37,11 @@ public class AddPostFragment extends Fragment implements AdapterView.OnItemSelec
     String spinnerValue;
     private EditText title;
     private EditText post;
-    private Button addPost;
+    private MaterialButton addPost;
+    Post newPost;
+    private FirebaseAuth mAuth;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
     public AddPostFragment() {
         // Required empty public constructor
     }
@@ -47,12 +64,24 @@ public class AddPostFragment extends Fragment implements AdapterView.OnItemSelec
         spinner.setAdapter(arrayAdapter);
         spinner.setOnItemSelectedListener(this);
 
+        mAuth = FirebaseAuth.getInstance();
+
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference("Categories");
+
         addPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String titlePost = String.valueOf(title.getText());
+                LocalDateTime time = LocalDateTime.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                String postTime = time.format(formatter);
+                String category = spinnerValue;
+                String postTitle = String.valueOf(title.getText());
                 String message = String.valueOf(post.getText());
-                Toast.makeText(getActivity(), spinnerValue, Toast.LENGTH_LONG).show();
+
+                addPostToFirebase(postTime,category,postTitle,message);
+               // Toast.makeText(getActivity(), postTime, Toast.LENGTH_LONG).show();
             }
         });
 
@@ -71,6 +100,37 @@ public class AddPostFragment extends Fragment implements AdapterView.OnItemSelec
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
+    private void addPostToFirebase(String time, String category, String title, String post) {
+        newPost = new Post();
+        newPost.setTime(time);
+        newPost.setTitle(title);
+        newPost.setPost(post);
+        newPost.setCategory(category);
+        String userId;
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        userId = currentUser.getUid();
+
+
+        Toast.makeText(requireActivity(), "Hello" , Toast.LENGTH_SHORT).show();
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // databaseReference.setValue(user);
+                databaseReference.child(userId).child(category).child(time).setValue(newPost);
+                Toast.makeText(requireActivity(), "data added" , Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(requireActivity(), "Fail to add data " + error, Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 }
