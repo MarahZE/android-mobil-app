@@ -1,5 +1,6 @@
 package com.example.diary;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
@@ -13,7 +14,7 @@ import android.widget.Toast;
 
 public class CardFragment extends Fragment {
 
-    private CardView vacation;
+    private CardView family;
 
     public CardFragment() {
         // Required empty public constructor
@@ -26,15 +27,21 @@ public class CardFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_card, container, false);
 
-        vacation = view.findViewById(R.id.vacation);
+        family = view.findViewById(R.id.family);
 
-        vacation.setOnClickListener(new View.OnClickListener() {
+        family.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                openViewPost();
                 Toast.makeText(getActivity(),"new toast!" , Toast.LENGTH_LONG).show();
             }
         });
 
         return view;
+    }
+
+    public void openViewPost() {
+        Intent intent = new Intent(getActivity(), ViewPost.class);
+        startActivity(intent);
     }
 }
