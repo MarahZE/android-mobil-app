@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProfileFragment"
+    android:background="@color/pink_light">
+
+    <!-- TODO: Update blank fragment layout -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/page"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Profile"
+        android:textColor="@color/black"
+        android:textSize="50dp"
+        android:layout_margin="30dp"
+        android:gravity="center"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/Uname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/page"
+        android:text="Name"
+        android:drawableLeft="@drawable/baseline_person_24"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black"
+        android:layout_margin="10dp"
+        android:layout_marginBottom="0dp"
+        android:padding="20dp"
+        android:background="#30ffffff"/>
+        <TextView
+            android:id="@+id/currentName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/Uname"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:padding="20dp"
+            android:background="#30ffffff"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"/>
+        <TextView
+            android:id="@+id/Uemail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/currentName"
+            android:text="Email"
+            android:drawableLeft="@drawable/baseline_email_24"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:layout_margin="10dp"
+            android:layout_marginBottom="0dp"
+            android:padding="20dp"
+            android:background="#30ffffff"/>
+        <TextView
+            android:id="@+id/currentEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/Uemail"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:padding="20dp"
+            android:background="#30ffffff"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"/>
+        <Button
+            android:id="@+id/restPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/currentEmail"
+            android:layout_margin="30dp"
+            android:layout_centerHorizontal="true"
+            android:backgroundTint="@color/pink"
+            android:text="Rest Password"/>
+
+        <Button
+            android:id="@+id/logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/restPassword"
+            android:layout_margin="20dp"
+            android:layout_centerHorizontal="true"
+            android:backgroundTint="@color/pink"
+            android:text="Log out"/>
+
+    </RelativeLayout>
+
+</FrameLayout>

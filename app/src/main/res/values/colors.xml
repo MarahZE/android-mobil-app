@@ -3,4 +3,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="pink">#EDAEC0</color>
+    <color name="pink_light">#ffecf2</color>
 </resources>
