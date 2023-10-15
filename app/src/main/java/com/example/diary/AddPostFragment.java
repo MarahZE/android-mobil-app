@@ -25,6 +25,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -132,5 +134,11 @@ public class AddPostFragment extends Fragment implements AdapterView.OnItemSelec
             }
         });
 
+    }
+
+    //to do
+    public String hashPost(String password) {
+
+        return "";
     }
 }
